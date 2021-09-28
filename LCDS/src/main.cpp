@@ -26,13 +26,16 @@
 
 #define Boton1 14
 #define Boton2 12
+
+#define led1 25 //verde
+#define led2 13 //rojo
 //*****************************************************************************
 // Prototipos de función
 //*****************************************************************************
 void separarvariables1(void);
 void separarvariables2(void);
 void contBitsSuma(void);
-void contBitsResta(void);
+//void contBitsResta(void);
 //*****************************************************************************
 // Variables Globales
 //*****************************************************************************
@@ -73,13 +76,18 @@ void IRAM_ATTR boton2()
 //*****************************************************************************
 
 void setup() {
-  //boton
-  pinMode(Boton1, INPUT_PULLUP);
+  //leds
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  digitalWrite(led1, 0);
+  digitalWrite(led2, 0);
+  //boton1
+  //pinMode(Boton1, INPUT_PULLUP);
   attachInterrupt(Boton1, boton1, RISING);
 
-  //boton
-  pinMode(Boton1, INPUT_PULLUP);
-  attachInterrupt(Boton1, boton2, RISING);
+  //boton2
+  //pinMode(Boton2, INPUT_PULLUP);
+  attachInterrupt(Boton2, boton2, RISING);
   
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
@@ -93,7 +101,7 @@ void setup() {
 
 void loop() {
   contBitsSuma();
-  contBitsResta();
+  //contBitsResta();
   separarvariables1();
   separarvariables2();
   // set the cursor to column 0, line 1
@@ -136,23 +144,41 @@ void separarvariables2(){
 void contBitsSuma(){
   if (ISRB1 == 1 && contadorDisplay < 255){
     contadorDisplay = contadorDisplay + 1 ;
-   
+    digitalWrite(led1, 1);
+   ISRB1 = 0;
   }
 
   if (ISRB1 == 1 && contadorDisplay == 255){
     contadorDisplay = 255 ;
-   
+    digitalWrite(led1, 1);
+    ISRB1 = 0;
   }
 
-  ISRB1 = 0;
-}
-void contBitsResta(){
-  if (ISRB2 == 1 && contadorDisplay > 0){
+  if (ISRB2 > 0 && contadorDisplay > 0){
     contadorDisplay = contadorDisplay - 1 ;
+     digitalWrite(led2, 1);
+     ISRB2 = 0;
   }
   if (ISRB2 == 1 && contadorDisplay == 0){
     contadorDisplay = 0 ;
+     digitalWrite(led2, 1);
+     ISRB2 = 0;
     
   }
-  ISRB2 = 0;
+  
 }
+/*
+void contBitsResta(){
+  if (ISRB2 == 1 && contadorDisplay > 0){
+    contadorDisplay = contadorDisplay - 1 ;
+     digitalWrite(led2, 1);
+     ISRB2 = 0;
+  }
+  if (ISRB2 == 1 && contadorDisplay == 0){
+    contadorDisplay = 0 ;
+     digitalWrite(led2, 1);
+     ISRB2 = 0;
+    
+  }
+  
+}*/
